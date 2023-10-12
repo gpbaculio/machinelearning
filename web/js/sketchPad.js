@@ -15,24 +15,33 @@ class SketchPad {
 
     this.#addEventListeners();
   }
+
   #addEventListeners() {
     this.canvas.onmousedown = (evt) => {
       const mouse = this.#getMouse(evt); // [x, y] coordinates
       this.path = [mouse];
       this.isDrawing = true;
     };
+
     this.canvas.onmousemove = (evt) => {
       if (this.isDrawing) {
         const mouse = this.#getMouse(evt); // [x, y] coordinates
         this.path.push(mouse);
-        console.log(this.path.length);
+        this.#redraw();
       }
     };
+
     this.canvas.onmouseup = () => {
       this.isDrawing = false;
       this.path = [];
     };
   }
+
+  #redraw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    draw.path(this.ctx, this.path);
+  }
+
   #getMouse = (evt) => {
     const rect = this.canvas.getBoundingClientRect();
 
